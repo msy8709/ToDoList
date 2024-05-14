@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Timer from "./Timer";
+import TodoModal from "./TodoModal";
+import styles from "./todolist.module.css"
 type Todo = {
     id : number;
     text : string;
@@ -14,6 +16,8 @@ const ToDoList : React.FC = () => {
         {id : 3, text : '미팅하기', isChecked : false},
     ]);
     const [newTodo, setNewTodo] = useState<string>('')
+    const [showDetail, setShowDetail] = useState<boolean>(false);
+    const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null)
     const handleCheckedChange = (itemId : number) => {
         setTodos((prevItems) => 
             prevItems.map((item) =>
@@ -29,10 +33,19 @@ const ToDoList : React.FC = () => {
     const delTodo = (id : number) => {
         setTodos(todos.filter((todo) => todo.id !== id))
     }
+
+    const handleTodoClick = (todo: Todo) => {
+        setShowDetail(true)
+        setSelectedTodo(todo)
+    }
+
+    const handleCloseDetail = () => {
+        setShowDetail(false)
+    }
     return(
-        <div>
+        <div className={styles.todolist}>
             <h1>{title}</h1>
-            <div className="container">
+            <div className="todolist">
                 <div>
                     <Timer/>
                     <input type = "text" placeholder="할 일 입력" onChange = {(e) => setNewTodo(e.target.value)}>
@@ -48,7 +61,7 @@ const ToDoList : React.FC = () => {
                                 {
                                     todo.isChecked ? 
                                     <del>{todo.text}</del>
-                                    : <span>{todo.text}</span>
+                                    : <span onClick={() => handleTodoClick}>{todo.text}</span>
                                 }
                             </span>
                             <button onClick={(id) => delTodo}>삭제</button>
@@ -57,7 +70,10 @@ const ToDoList : React.FC = () => {
                     
                 </ul>
             </div>
+            {showDetail ? <TodoModal /> : ''}
+            
         </div>
     )
 }
 export default ToDoList;
+
