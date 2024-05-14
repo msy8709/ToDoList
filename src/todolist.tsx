@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Timer from "./Timer";
 type Todo = {
     id : number;
     text : string;
@@ -30,6 +31,7 @@ const ToDoList : React.FC = () => {
             <h1>{title}</h1>
             <div className="container">
                 <div>
+                    <Timer/>
                     <input type = "text" placeholder="할 일 입력" onChange = {(e) => setNewTodo(e.target.value)}>
 
                     </input>
